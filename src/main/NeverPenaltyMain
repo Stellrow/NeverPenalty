@@ -1,0 +1,31 @@
+package main;
+
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.PrepareAnvilEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.Repairable;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class NeverPenaltyMain extends JavaPlugin implements Listener{
+	public void onEnable() {
+		getServer().getPluginManager().registerEvents(this, this);
+	}
+	@EventHandler
+	public void anvilE(PrepareAnvilEvent e) {
+		ItemStack item = e.getResult();
+		if(!item.hasItemMeta()) {
+			return;
+		}
+		ItemMeta im = item.getItemMeta();
+		if(im instanceof Repairable) {
+			Repairable rep = (Repairable)im;
+			if(rep.hasRepairCost()) {
+				rep.setRepairCost(0);
+			}
+		}
+		item.setItemMeta(im);
+	}
+
+}
